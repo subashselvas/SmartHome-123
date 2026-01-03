@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Home Dashboard</title>
+
+<style>
+:root {
+    --bg: #f5f7fa;
+    --card: white;
+    --text: #333;
+}
+
+.dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: white;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s;
+}
+
+header {
+    background: linear-gradient(90deg,#7c4dff,#448aff);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header button {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: white;
+    color: #333;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 20px;
+    padding: 25px;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.toggle {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background: #ef5350;
+    color: white;
+}
+
+.on {
+    background: #43a047;
+}
+
+.range {
+    width: 100%;
+}
+
+.notify {
+    background: linear-gradient(135deg,#ff7043,#ffca28);
+    color: white;
+}
+
+.weather {
+    background: linear-gradient(135deg,#29b6f6,#4fc3f7);
+    color: white;
+}
+
+.energy {
+    background: linear-gradient(135deg,#66bb6a,#aed581);
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🏠 Smart Home Control Panel</h1>
+    <p id="time"></p>
+    <button onclick="toggleTheme()">🌙 Toggle Theme</button>
+</header>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h3>💡 Living Room Light</h3>
+        <p>Status: <span id="light">OFF</span></p>
+        <input type="range" min="0" max="100" class="range"
+               oninput="document.getElementById('bright').innerText=this.value">
+        <p>Brightness: <span id="bright">0</span>%</p>
+        <button class="toggle" onclick="toggle(this,'light')">Toggle</button>
+    </div>
+
+    <div class="card">
+        <h3>🌀 Fan</h3>
+        <p>Status: <span id="fan">OFF</span></p>
+        <input type="range" min="0" max="5" class="range"
+               oninput="document.getElementById('speed').innerText=this.value">
+        <p>Speed: <span id="speed">0</span></p>
+        <button class="toggle" onclick="toggle(this,'fan')">Toggle</button>
+    </div>
+
+    <div class="card">
+        <h3>❄️ Air Conditioner</h3>
+        <p>Status: <span id="ac">OFF</span></p>
+        <input type="range" min="16" max="30" class="range"
+               oninput="document.getElementById('temp').innerText=this.value">
+        <p>Temp: <span id="temp">24</span>°C</p>
+        <button class="toggle" onclick="toggle(this,'ac')">Toggle</button>
+    </div>
+
+    <div class="card">
+        <h3>🚪 Main Door</h3>
+        <p id="door">LOCKED</p>
+        <button class="toggle" onclick="lockDoor(this)">Unlock</button>
+    </div>
+
+    <div class="card weather">
+        <h3>🌤 Weather</h3>
+        <p>City: Chennai</p>
+        <p>Temp: 31°C</p>
+        <p>Status: Sunny</p>
+    </div>
+
+    <div class="card energy">
+        <h3>⚡ Energy Usage</h3>
+        <p><span id="energy">145</span> kWh</p>
+        <button onclick="energy+=5;energyEl.innerText=energy">Update</button>
+    </div>
+
+    <div class="card notify">
+        <h3>🔔 Alerts</h3>
+        <ul>
+            <li>✔ System Normal</li>
+            <li>✔ Door Secured</li>
+            <li>✔ Power Stable</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+let energy = 145;
+let energyEl = document.getElementById("energy");
+
+function toggle(btn, id) {
+    let el = document.getElementById(id);
+    if (el.innerText === "OFF") {
+        el.innerText = "ON";
+        btn.classList.add("on");
+    } else {
+        el.innerText = "OFF";
+        btn.classList.remove("on");
+    }
+}
+
+function lockDoor(btn) {
+    let door = document.getElementById("door");
+    if (door.innerText === "LOCKED") {
+        door.innerText = "UNLOCKED";
+        btn.innerText = "Lock";
+        btn.classList.add("on");
+    } else {
+        door.innerText = "LOCKED";
+        btn.innerText = "Unlock";
+        btn.classList.remove("on");
+    }
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+}
+
+function updateTime() {
+    document.getElementById("time").innerText =
+        new Date().toLocaleString();
+}
+
+setInterval(updateTime, 1000);
+updateTime();
+</script>
+
+</body>
+</html>
